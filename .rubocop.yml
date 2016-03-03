@@ -1,0 +1,79 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - app/lib/dominos/example-response/**/*
+    - bin/*
+    - db/schema.rb
+    - db/migrate/*
+    - lib/generators/presenter/**/*
+    - lib/generators/**/*
+    - node_modules/**/*
+
+Rails:
+  Enabled: true
+
+Documentation:
+  Enabled: false
+
+DotPosition:
+  EnforcedStyle: trailing
+
+Lint/Eval:
+  Exclude:
+    - test/assertions.rb
+    - app/lib/dominos/faker.rb
+
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+Style/SpaceBeforeFirstArg:
+  Exclude:
+    - db/schema.rb
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/ClassVars:
+  Exclude:
+    - test/test_helper.rb
+
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Style/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Style/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+Style/BracesAroundHashParameters:
+  Enabled: false
+
+Style/IndentArray:
+  EnforcedStyle: consistent
+
+Style/IndentHash:
+  Enabled: false
+
+Style/IndentationWidth:
+  Exclude:
+    - lib/generators/presenter/presenter_generator.rb
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/SpaceBeforeComma:
+  Enabled: false
+
+Style/SpaceBeforeBlockBraces:
+  EnforcedStyle: no_space
+
+Style/UnneededPercentQ:
+  Enabled: false

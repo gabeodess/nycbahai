@@ -1,0 +1,22 @@
+@contributions = Contribution.where(:name => params[:id])
+@this_year = Time.zone.today.beginning_of_year
+@last_year = (Time.zone.today - 1.year).beginning_of_year
+@contributions_this_year = @contributions.where(:date => @this_year..@this_year.end_of_year)
+@contributions_last_year = @contributions.where(:date => @last_year..@last_year.end_of_year)
+@stats = OpenStruct.new({
+  :email => ContributerEmailAddress.find_by(:name => params[:id]).try(:email),
+  :total_contributions => @contributions.count,
+  :total_paid => number_to_currency(@contributions.sum(:amount)),
+  :total_contributions_this_year => @contributions_this_year.count,
+  :total_paid_this_year => number_to_currency(@contributions_this_year.sum(:amount)),
+  :total_contributions_last_year => @contributions_last_year.count,
+  :total_paid_last_year => number_to_currency(@contributions_last_year.sum(:amount))
+})
+h1{params[:id]}
+panel "Table of Contents" do
+  attributes_table_for @stats  do
+    @stats.marshal_dump.keys.each do |key|
+      row(key)
+    end
+  end
+end

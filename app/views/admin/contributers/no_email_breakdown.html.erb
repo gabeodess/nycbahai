@@ -1,0 +1,55 @@
+<style type="text/css" media="print">
+  @media print
+  {
+    #active_admin_content{
+      border:none !important;
+      padding-top:0 !important;
+    }
+    #title_bar, #header{
+      display:none;
+    }
+    .print-break-after{
+      page-break-after: always;
+    }
+    .print-no-break{
+      page-break-inside: avoid;
+    }
+  }
+</style>
+
+<%-
+  i = 0
+  groups = @contributions.group_by(&:name)
+ %>
+<%- groups.each do |name, contributions| %>
+  <%- i+=1 %>
+  <div class='print-no-break <%= "print-break-after" if i != groups.length %>'>
+    <h2>Spiritual Assembly of the Baha'is of the City of New York</h2>
+    <h4 style='float:right'><%= Time.zone.today %></h4>
+    <h1>
+      Donar Contribution Summary
+    </h1>
+    <h3><%= @date_start.strftime("%B") %> through <%= @date_end.strftime("%B") %> of <%= @date_start.year %></h3>
+    <table class='table'>
+      <thead>
+        <tr>
+          <th colspan='4'><%= name %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for contribution in contributions.sort_by(&:date) %>
+          <tr>
+            <td><%= contribution.date %></td>
+            <td><%= contribution.num %></td>
+            <td><%= contribution.fund %></td>
+            <td class='text-right'><%= number_to_currency(contribution.amount) %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <th class='text-bold text-right' colspan='3'>Total:</td>
+          <th class='text-bold text-right'><%= number_to_currency contributions.map(&:amount).sum %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<% end %>
