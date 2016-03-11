@@ -10,8 +10,13 @@ class SummaryEmail < ActiveRecord::Base
   # = Hooks =
   # =========
   after_create do
+    send_email
+  end
+
+  def send_email
     Mailer.summary_email(contributer, year).deliver_later
   end
+  alias_method :resend!, :send_email
 
   # =================
   # = Class Methods =

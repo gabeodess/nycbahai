@@ -1,10 +1,10 @@
-Dear First Name Last Name,
+Dear <%= @first_name %><%= " #{@last_name}" if @last_name.present? %>,
 
-Please find your Bahá’í Fund contribution summary for January through December 2015 below.  You may use this message as a tax receipt for your contributions for 2015. Please email luke@bahainyc.org if you need any additional documentation.
+Please find your Bahá’í Fund contribution summary for January through December <%= @year %> below.  You may use this message as a tax receipt for your contributions for <%= @year %>. Please email <%= ENV['TREASURER_EMAIL'] %> if you need any additional documentation.
 
 With loving regards,
 
-Luke Bolton, Treasurer
+<%= ENV['TREASURER_NAME'] %>, Treasurer
 Local Spiritual Assembly of the Baha'is of New York
 
 All the friends of God… should contribute to the extent possible, however modest their offering may be.  God doth not burden a soul beyond its capacity… O Friends of God!  Be ye assured that in place of these contributions, your agriculture, your industry, and your commerce will be blessed by manifold increases, with goodly gifts and bestowals.  He who cometh with one goodly deed will receive a tenfold reward.  There is no doubt that the living Lord will abundantly confirm those who expend their wealth in His path.

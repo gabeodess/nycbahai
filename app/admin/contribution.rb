@@ -1,5 +1,16 @@
 ActiveAdmin.register Contribution do
 
+  batch_action :resend do |ids|
+    Contribution.where(:id => ids).select("DISTINCT ON(contributions.name) contributions.name, contributions.date").find_emailable.each do |contribution|
+      if summary_email = contribution.summary_emails.where(:year => contribution.date.year).first
+        summary_email.resend!
+      else
+        contribution.create_summary_email!
+      end
+    end
+    redirect_to :admin_summary_emails
+  end
+
   collection_action :import, :method => :post do
     ImportContributionsJob.perform_now(params[:import][:file])
     redirect_to :admin_contributions
@@ -25,6 +36,9 @@ ActiveAdmin.register Contribution do
     end
   end
 
+  filter :amount, :as => :numeric
+  preserve_default_filters!
+
   index do
     selectable_column
     id_column
@@ -33,6 +47,7 @@ ActiveAdmin.register Contribution do
     column(:num)
     column(:name){ |i| link_to(i.name, contributer_admin_contribution_path(i.name)) }
     column(:fund)
+    column(:email)
     column(:created_at)
     column(:updated_at)
     actions

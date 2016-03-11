@@ -13,10 +13,15 @@ class Contribution < ActiveRecord::Base
   # = Associations =
   # ================
   belongs_to :contributer_email_address, :foreign_key => :name, :primary_key => :name
+  has_many :summary_emails, :foreign_key => :contributer, :primary_key => :name
 
   # ====================
   # = Instance Methods =
   # ====================
   delegate :email, :to => :contributer_email_address, :allow_nil => true
+
+  def create_summary_email!
+    summary_emails.create!({:year => date.year}) unless summary_emails.where(:year => date.year).exists?
+  end
 
 end

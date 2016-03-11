@@ -7,8 +7,10 @@ class ImportContributionsJob < ActiveJob::Base
       sheet.each({:name => "Name", :amount => 'Amount', :fund => 'Class', :date => "Date", :num => "Num"}) do |hash|
         puts hash
         next unless hash[:amount].to_f > 0 && hash[:name].present?
+        hash[:amount].gsub!(/[^\d\.]/, '')
         hash[:date] = Date.strptime(hash[:date], "%m/%d/%Y") if hash[:date].is_a?(String)
-        Contribution.create!(hash) if hash[:num].blank? || !Contribution.where(:num => hash[:num]).exists?
+        @contribution = (hash[:num].present? && Contribution.find_by({:num => hash[:num]})) || Contribution.new(hash)
+        @contribution.update!(hash)
       end
     end
   end
