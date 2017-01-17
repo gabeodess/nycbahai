@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: people
+#
+#  id          :integer          not null, primary key
+#  declared_on :date
+#  first_name  :string
+#  last_name   :string
+#  email       :string
+#  phone       :string
+#  address     :jsonb
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  gender      :string
+#
+# Indexes
+#
+#  index_people_on_address  (address)
+#
+
 class Person < ActiveRecord::Base
   
   BOROUGHS = %w( manhattan brooklyn staten\ island queens the\ bronx )

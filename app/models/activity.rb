@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: activities
+#
+#  id             :integer          not null, primary key
+#  type           :string           not null
+#  last_update_on :date             not null
+#  address        :jsonb            not null
+#  contact        :jsonb            not null
+#  borough        :string
+#  neighborhood   :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+
 class Activity < ActiveRecord::Base
 
   self.inheritance_column = :_type

@@ -27,3 +27,7 @@ foreman start
 ### Start the console
 ```
 foreman run rails c
+
+## Contributions
+The contributions section of the application can only be accessed to permitted admin users.  To give an admin user permission you can use the following command in console:
+    @admin_user.grant!(:contributions)

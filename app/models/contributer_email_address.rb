@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: contributer_email_addresses
+#
+#  id         :integer          not null, primary key
+#  name       :string           not null
+#  email      :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_contributer_email_addresses_on_email  (email)
+#  index_contributer_email_addresses_on_name   (name) UNIQUE
+#
+
 class ContributerEmailAddress < ActiveRecord::Base
 
   # ================
