@@ -1,6 +1,7 @@
 ---
 :concurrency: 1
 :queues:
+  - import
   - default
   - mailers
   - [priority, 2]

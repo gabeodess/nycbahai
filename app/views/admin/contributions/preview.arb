@@ -1,0 +1,3 @@
+div do
+  raw Mailer.summary_email(resource.name, resource.date.year).parts.last.decoded
+end

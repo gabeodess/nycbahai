@@ -29,6 +29,13 @@ class Contribution < ActiveRecord::Base
   belongs_to :contributer_email_address, :foreign_key => :name, :primary_key => :name
   has_many :summary_emails, :foreign_key => :contributer, :primary_key => :name
 
+  # ===========
+  # = Setters =
+  # ===========
+  def amount=(val)
+    self[:amount] = val.to_d
+  end
+
   # ====================
   # = Instance Methods =
   # ====================
