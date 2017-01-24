@@ -1,0 +1,22 @@
+<%- queue = Sidekiq::Queue.new("import") %>
+<script type="text/javascript">
+  var Poll = {
+    get: function(){
+      $.get('<%= import_job_count_admin_contributions_path %>', function(data){
+        $('#percent').text('%' + Math.round((<%= queue.size %> - data.count) * 100 / <%= queue.size %>));
+        if (data.count > 0) {
+          Poll.get();
+        }else{
+          $('#percent').text('Redirecting to contributions list...');
+          window.location.href = '<%= admin_contributions_path %>';
+        }
+      });
+    }
+  }
+  Poll.get();
+</script>
+
+<h2>
+  Processing Import:
+  <span id='percent'></span>
+</h2>
