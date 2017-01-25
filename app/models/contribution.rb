@@ -17,11 +17,11 @@ class Contribution < ActiveRecord::Base
   # ==========
   # = Scopes =
   # ==========
-  scope :find_by_year, lambda{ |year|
+  scope :find_emailable, ->{ joins(:contributer_email_address) }
+  scope :year, ->(year){
     start = Date.parse("01-01-#{year}")
     where({:date => start..start.end_of_year})
   }
-  scope :find_emailable, ->{ joins(:contributer_email_address) }
 
   # ================
   # = Associations =

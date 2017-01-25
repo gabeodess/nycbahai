@@ -7,7 +7,7 @@ class Mailer < ApplicationMailer
     @first_name = @name.split(',').last.strip
     @last_name = @name.split(',').first.strip
     @year = year
-    @contributions = Contribution.where(:name => @name).find_by_year(@year)
+    @contributions = Contribution.where(:name => @name).year(@year)
 
     mail to: @email, :from => %("#{ENV['TREASURER_NAME']}" <#{ENV['TREASURER_EMAIL']}>), :subject => "NYC Baha'i Contribution Summary"
   end
