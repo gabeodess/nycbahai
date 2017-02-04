@@ -2,6 +2,12 @@ ActiveAdmin.register Contribution do
 
   config.sort_order = 'date_desc'
 
+  member_action :change_name, method: :put do
+    @name = params.dig(:change_name, :name)
+    Contribution.where(name: resource.name).update_all(name: @name)
+    redirect_to admin_contributions_path(q: {name_eq: @name})
+  end
+
   batch_action :resend do |ids|
     Contribution.where(:id => ids).select("DISTINCT ON(contributions.name) contributions.name, contributions.date").find_emailable.each do |contribution|
       if summary_email = contribution.summary_emails.where(:year => contribution.date.year).first
@@ -44,9 +50,26 @@ ActiveAdmin.register Contribution do
     end
   end
 
+  sidebar :change_name, only: [:show] do
+    form_for :change_name, method: :put, :url => change_name_admin_contribution_path(resource) do |f|
+      f.text_field :name, style: 'margin-bottom: 10px'
+      f.submit 'Change Name', data: {disable_with: '...'}
+    end
+  end
+
+  permit_params :name, :date, :amount, :fund
+  form do |f|
+    f.inputs do
+      f.input :name
+      f.input :amount
+      f.input :date
+      f.input :fund
+    end
+    f.actions
+  end
+
   filter :amount, :as => :numeric
   preserve_default_filters!
-
   index do
     selectable_column
     id_column

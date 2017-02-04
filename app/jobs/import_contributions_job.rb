@@ -38,7 +38,6 @@ class ImportContributionsJob < ActiveJob::Base
 
   def parse1
     @sheet.each({:name => "Name", :amount => 'Amount', :fund => 'Class', :date => "Date", :num => "Num"}) do |hash|
-      puts hash
       next unless hash[:amount].to_f > 0 && hash[:name].present?
       hash[:amount].to_s.gsub!(/[^\d\.]/, '')
       hash[:date] = Date.strptime(hash[:date], "%m/%d/%Y") if hash[:date].is_a?(String)

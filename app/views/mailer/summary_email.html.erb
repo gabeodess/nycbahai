@@ -1,13 +1,18 @@
+<div style='text-align:center; margin-bottom:20px'>
+  The Local Spiritual Assembly of the Baha'is of the City of New York
+</div>
 Dear <%= @first_name %><%= " #{@last_name}" if @last_name.present? %>,
 <br><br>
-Please find your Bahá’í Fund contribution summary for January through December <%= @year %> below.
-You may use this message as a tax receipt for your contributions for <%= @year %>.
-Please email <%= ENV['TREASURER_EMAIL'] %> if you need any additional documentation.
+
+Thank you for your contributions to the Baha'i Fund over the past year. Contributions to the fund are the lifeblood of the Cause and enable our community to support the many community building efforts on a local, regional and national level and the Local Spiritual Assembly greatly appreciates each contribution.
+<br><br>
+Please find your Bahá’í Fund contribution summary for January through December 2016 below. You may use this message as a tax receipt for your contributions for 2016. Any contributions made directly to the National Fund or using the National Online Contribution System will be recorded in a separate receipt from the National Treasurer's Office. Let it be noted that no goods or services were provided in consideration for this contribution unless otherwise recorded.
+<br><br>
+Please email <%= mail_to ENV['TREASURER_EMAIL'] %> if you need any additional documentation.
 <br><br>
 With loving regards,
 <br><br>
-<%= ENV['TREASURER_NAME'] %>, Treasurer
-Local Spiritual Assembly of the Baha'is of New York
+<%= ENV['TREASURER_NAME'] %>, Treasurer Local Spiritual Assembly of the Baha'is of New York
 <br><br>
 <i>
   All the friends of God… should contribute to the extent possible, however modest their offering may be.

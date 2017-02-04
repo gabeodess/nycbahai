@@ -32,6 +32,10 @@ class Contribution < ActiveRecord::Base
   # ===========
   # = Setters =
   # ===========
+  def name=(val)
+    self[:name] = val.include?(',') ? val.split(',').reverse.map(&:strip).join(' ') : val.strip
+  end
+
   def amount=(val)
     self[:amount] = val.to_d
   end
