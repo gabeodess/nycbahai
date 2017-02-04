@@ -4,8 +4,9 @@ class Mailer < ApplicationMailer
     @name = name
     @contributer_email_address = ContributerEmailAddress.where(:name => @name).first
     @email = email || @contributer_email_address.try(:email)
-    @first_name = @name.split(',').last.strip
-    @last_name = @name.split(',').first.strip
+    names = @name.include?(',') ? @name.split(',').reverse : @name.split(' ')
+    @first_name = names.first.strip
+    @last_name = names.last.strip if names.length > 1
     @year = year
     @contributions = Contribution.where(:name => @name).year(@year)
 
