@@ -21,7 +21,7 @@ class ImportContributionsJob < ActiveJob::Base
 
   def process(hash)
     hash[:name] = hash[:name].presence || 'Anonymous'
-    Contribution.where(:num => hash[:num]).first_or_create!(hash)
+    Contribution.where(num: hash[:num], fund: hash[:fund]).first_or_create!(hash)
   end
 
   def parse2
@@ -42,6 +42,7 @@ class ImportContributionsJob < ActiveJob::Base
       hash[:amount].to_s.gsub!(/[^\d\.]/, '')
       hash[:date] = Date.strptime(hash[:date], "%m/%d/%Y") if hash[:date].is_a?(String)
       hash[:date] = hash[:date].to_s(:db)
+      hash[:fund] = nil if hash[:fund].blank?
       ImportContributionsJob.perform_later(hash)
     end
   end
