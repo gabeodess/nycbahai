@@ -2,6 +2,11 @@ ActiveAdmin.register Contribution do
 
   config.sort_order = 'date_desc'
 
+  scope :all, default: true
+  scope :no_email do |item|
+    item.reorder('contributions.name ASC').includes(:contributer_email_address).where(contributer_email_addresses: {id: nil}).select('DISTINCT ON(contributions.name) contributions.*')
+  end
+
   member_action :change_name, method: :put do
     @name = params.dig(:change_name, :name)
     Contribution.where(name: resource.name).update_all(name: @name)
@@ -57,17 +62,23 @@ ActiveAdmin.register Contribution do
     end
   end
 
-  permit_params :name, :date, :amount, :fund
+  permit_params :name, :date, :amount, :fund, contributer_email_address_attributes: [:email, :id]
   form do |f|
     f.inputs do
       f.input :name
       f.input :amount
       f.input :date
       f.input :fund
+      f.object.build_contributer_email_address if f.object.contributer_email_address.blank?
+      f.fields_for :contributer_email_address do |f2|
+        f2.input :email
+      end
     end
+
     f.actions
   end
 
+  filter :contributer_email_address_id_blank, as: :boolean
   filter :amount, :as => :numeric
   preserve_default_filters!
   index do

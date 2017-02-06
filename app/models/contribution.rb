@@ -29,6 +29,11 @@ class Contribution < ActiveRecord::Base
   belongs_to :contributer_email_address, :foreign_key => :name, :primary_key => :name
   has_many :summary_emails, :foreign_key => :contributer, :primary_key => :name
 
+  # =====================
+  # = Nested Attributes =
+  # =====================
+  accepts_nested_attributes_for :contributer_email_address, :allow_destroy => true, :reject_if => proc { |obj| obj['email'].blank? }
+
   # ===========
   # = Setters =
   # ===========
