@@ -16,4 +16,4 @@
 !/log/.keep
 /tmp
 .env
-latest.dump
+latest.dump*

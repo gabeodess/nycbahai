@@ -31,3 +31,6 @@ foreman run rails c
 ## Contributions
 The contributions section of the application can only be accessed to permitted admin users.  To give an admin user permission you can use the following command in console:
     @admin_user.grant!(:contributions)
+
+## Copy Production Database
+    spring rake db:drop db:create && heroku pg:backups:capture -a nycbahai && heroku pg:backups:download -a nycbahai && pg_restore --verbose --clean --no-acl --no-owner -d nyc_bahai_development latest.dump && spring rake db:migrate

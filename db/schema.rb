@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160224163525) do
+ActiveRecord::Schema.define(version: 20170212233512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,11 +24,10 @@ ActiveRecord::Schema.define(version: 20160224163525) do
     t.string   "author_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
   end
-
-  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
-  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
-  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
   create_table "activities", force: :cascade do |t|
     t.string   "type",                        null: false
@@ -56,21 +54,19 @@ ActiveRecord::Schema.define(version: 20160224163525) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.jsonb    "permissions",            default: [], null: false
+    t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
+    t.index ["permissions"], name: "index_admin_users_on_permissions", using: :gin
+    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
-  add_index "admin_users", ["permissions"], name: "index_admin_users_on_permissions", using: :gin
-  add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "contributer_email_addresses", force: :cascade do |t|
     t.string   "name",       null: false
     t.string   "email",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_contributer_email_addresses_on_email", using: :btree
+    t.index ["name"], name: "index_contributer_email_addresses_on_name", unique: true, using: :btree
   end
-
-  add_index "contributer_email_addresses", ["email"], name: "index_contributer_email_addresses_on_email", using: :btree
-  add_index "contributer_email_addresses", ["name"], name: "index_contributer_email_addresses_on_name", unique: true, using: :btree
 
   create_table "contributions", force: :cascade do |t|
     t.money    "amount",     scale: 2, null: false
@@ -87,10 +83,9 @@ ActiveRecord::Schema.define(version: 20160224163525) do
     t.integer  "person_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["activity_id"], name: "index_hosts_on_activity_id", using: :btree
+    t.index ["person_id"], name: "index_hosts_on_person_id", using: :btree
   end
-
-  add_index "hosts", ["activity_id"], name: "index_hosts_on_activity_id", using: :btree
-  add_index "hosts", ["person_id"], name: "index_hosts_on_person_id", using: :btree
 
   create_table "imports", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -104,10 +99,9 @@ ActiveRecord::Schema.define(version: 20160224163525) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.string   "description"
+    t.index ["activity_id"], name: "index_participants_on_activity_id", using: :btree
+    t.index ["person_id"], name: "index_participants_on_person_id", using: :btree
   end
-
-  add_index "participants", ["activity_id"], name: "index_participants_on_activity_id", using: :btree
-  add_index "participants", ["person_id"], name: "index_participants_on_person_id", using: :btree
 
   create_table "people", force: :cascade do |t|
     t.date     "declared_on"
@@ -119,9 +113,8 @@ ActiveRecord::Schema.define(version: 20160224163525) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "gender"
+    t.index ["address"], name: "index_people_on_address", using: :gin
   end
-
-  add_index "people", ["address"], name: "index_people_on_address", using: :gin
 
   create_table "summary_emails", force: :cascade do |t|
     t.string   "contributer"
@@ -129,10 +122,9 @@ ActiveRecord::Schema.define(version: 20160224163525) do
     t.datetime "sent_at"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["contributer", "year"], name: "index_summary_emails_on_contributer_and_year", unique: true, using: :btree
+    t.index ["contributer"], name: "index_summary_emails_on_contributer", using: :btree
   end
-
-  add_index "summary_emails", ["contributer", "year"], name: "index_summary_emails_on_contributer_and_year", unique: true, using: :btree
-  add_index "summary_emails", ["contributer"], name: "index_summary_emails_on_contributer", using: :btree
 
   add_foreign_key "hosts", "activities"
   add_foreign_key "hosts", "people"
