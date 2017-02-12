@@ -1,9 +1,11 @@
 <%- queue = Sidekiq::Queue.new("import") %>
 <script type="text/javascript">
+  var queue = <%= queue.size %>;
   var Poll = {
     get: function(){
       $.get('<%= import_job_count_admin_contributions_path %>', function(data){
-        $('#percent').text('%' + Math.round((<%= queue.size %> - data.count) * 100 / <%= queue.size %>));
+        if(data.count > queue){ queue = data.count }
+        $('#percent').text('%' + Math.round((queue - data.count) * 100 / queue));
         if (data.count > 0) {
           Poll.get();
         }else{
