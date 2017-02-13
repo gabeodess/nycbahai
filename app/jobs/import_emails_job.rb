@@ -13,9 +13,14 @@ class ImportEmailsJob < ApplicationJob
   end
 
   def perform_individual
-    email = ContributerEmailAddress.ransack(name_matches: @item[:name]).result.first_or_initialize
-    email.update!(@item)
-    Contribution.ransack(name_matches: email.name).result.update_all(name: email.name) if email.name.present?
+    email = @item[:email].strip
+    name = @item[:name].strip
+    name = Contribution.ransack(name_matches: name).result.limit(1).pluck(:name).first || name
+    cea = ContributerEmailAddress.ransack(name_matches: name).result.first_or_initialize
+    cea.update!({
+      email: email,
+      name: name
+    })
   end
 
   def perform_group
