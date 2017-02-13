@@ -33,4 +33,4 @@ The contributions section of the application can only be accessed to permitted a
     @admin_user.grant!(:contributions)
 
 ## Copy Production Database
-    spring rake db:drop db:create && heroku pg:backups:capture -a nycbahai && heroku pg:backups:download -a nycbahai && pg_restore --verbose --clean --no-acl --no-owner -d nyc_bahai_development latest.dump && spring rake db:migrate
+    spring rake db:drop db:create && heroku pg:backups:capture -a nycbahai && rm latest.dump && heroku pg:backups:download -a nycbahai && pg_restore --verbose --clean --no-acl --no-owner -d nyc_bahai_development latest.dump && spring rake db:migrate
