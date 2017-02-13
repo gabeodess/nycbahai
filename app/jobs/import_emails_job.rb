@@ -14,12 +14,12 @@ class ImportEmailsJob < ApplicationJob
 
   def perform_individual
     email = @item[:email].strip
-    name = @item[:name].strip
-    name = Contribution.ransack(name_matches: name).result.limit(1).pluck(:name).first || name
-    cea = ContributerEmailAddress.ransack(name_matches: name).result.first_or_initialize
+    helper = Contribution.new(name: @item[:name])
+    cea = ContributerEmailAddress.where(key: helper.key).first_or_initialize
     cea.update!({
       email: email,
-      name: name
+      name: helper.name,
+      key: helper.key
     })
   end
 

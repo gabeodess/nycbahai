@@ -10,6 +10,11 @@
 #  fund       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  key        :string           not null
+#
+# Indexes
+#
+#  index_contributions_on_key  (key)
 #
 
 class Contribution < ActiveRecord::Base
@@ -26,7 +31,7 @@ class Contribution < ActiveRecord::Base
   # ================
   # = Associations =
   # ================
-  belongs_to :contributer_email_address, :foreign_key => :name, :primary_key => :name
+  belongs_to :contributer_email_address, :foreign_key => :key, :primary_key => :key
   has_many :summary_emails, :foreign_key => :contributer, :primary_key => :name
 
   # =====================
@@ -34,11 +39,28 @@ class Contribution < ActiveRecord::Base
   # =====================
   accepts_nested_attributes_for :contributer_email_address, :allow_destroy => true, :reject_if => proc { |obj| obj['email'].blank? }
 
+  # ===============
+  # = Delegations =
+  # ===============
+  delegate :email, :to => :contributer_email_address, :allow_nil => true
+
+  # =================
+  # = Class Methods =
+  # =================
+  def self.organize_name(val)
+    return val.include?(',') ? val.split(',').reverse.map(&:strip).join(' ') : val.strip
+  end
+
+  def self.format_name(val)
+    return Contribution.where(key: val.parameterize).limit(1).pluck(:name).first || organize_name(val)
+  end
+
   # ===========
   # = Setters =
   # ===========
   def name=(val)
-    self[:name] = val.include?(',') ? val.split(',').reverse.map(&:strip).join(' ') : val.strip
+    self[:name] = Contribution.format_name(val)
+    self[:key] = name.parameterize
   end
 
   def amount=(val)
@@ -48,8 +70,6 @@ class Contribution < ActiveRecord::Base
   # ====================
   # = Instance Methods =
   # ====================
-  delegate :email, :to => :contributer_email_address, :allow_nil => true
-
   def create_summary_email!
     summary_emails.create!({:year => date.year}) unless summary_emails.where(:year => date.year).exists?
   end

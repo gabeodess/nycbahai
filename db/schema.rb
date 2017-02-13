@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212233512) do
+ActiveRecord::Schema.define(version: 20170213002104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,7 +64,9 @@ ActiveRecord::Schema.define(version: 20170212233512) do
     t.string   "email",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "key",        null: false
     t.index ["email"], name: "index_contributer_email_addresses_on_email", using: :btree
+    t.index ["key"], name: "index_contributer_email_addresses_on_key", unique: true, using: :btree
     t.index ["name"], name: "index_contributer_email_addresses_on_name", unique: true, using: :btree
   end
 
@@ -76,6 +78,8 @@ ActiveRecord::Schema.define(version: 20170212233512) do
     t.string   "fund"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.string   "key",                  null: false
+    t.index ["key"], name: "index_contributions_on_key", using: :btree
   end
 
   create_table "hosts", force: :cascade do |t|
