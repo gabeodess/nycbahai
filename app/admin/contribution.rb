@@ -6,6 +6,9 @@ ActiveAdmin.register Contribution do
   scope :no_email do |item|
     item.reorder('contributions.name ASC').includes(:contributer_email_address).where(contributer_email_addresses: {id: nil}).select('DISTINCT ON(contributions.name) contributions.*')
   end
+  scope :distinct_name do |item|
+    item.reorder('contributions.name ASC').select('DISTINCT ON(contributions.name) contributions.*')
+  end
 
   member_action :change_name, method: :put do
     @name = params.dig(:change_name, :name)

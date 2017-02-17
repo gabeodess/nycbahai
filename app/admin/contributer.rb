@@ -11,7 +11,7 @@ ActiveAdmin.register_page "Contributers" do
   end
 
   content do
-    table_for Contribution.includes(:contributer_email_address).select("DISTINCT ON(contributions.name) name") do
+    table_for Contribution.includes(:contributer_email_address).select("DISTINCT ON(contributions.name) name, key") do
       column(:name)
       column(:email)
     end
