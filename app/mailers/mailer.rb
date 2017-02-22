@@ -2,13 +2,12 @@ class Mailer < ApplicationMailer
 
   def summary_email(name, year, email = nil)
     @name = name
-    @contributer_email_address = ContributerEmailAddress.where(:name => @name).first
-    @email = email || @contributer_email_address.try(:email)
+    @year = year
+    @contributions = Contribution.where(:name => @name).year(@year)
+    @email = @contributions.map(&:email).compact.first
     names = @name.include?(',') ? @name.split(',').reverse : @name.split(' ')
     @first_name = names.first.strip
     @last_name = names.last.strip if names.length > 1
-    @year = year
-    @contributions = Contribution.where(:name => @name).year(@year)
 
     mail to: @email, :from => %("#{ENV['TREASURER_NAME']}" <#{ENV['TREASURER_EMAIL']}>), :subject => "NYC Baha'i Contribution Summary"
   end
